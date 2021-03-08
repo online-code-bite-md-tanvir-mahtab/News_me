@@ -71,6 +71,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                }
             }
 
+
             private void deleverResult(String[] data) {
                 this.data = data;
                 super.deliverResult(data);

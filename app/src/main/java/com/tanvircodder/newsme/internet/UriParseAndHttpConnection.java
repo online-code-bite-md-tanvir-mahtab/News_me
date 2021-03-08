@@ -3,13 +3,16 @@ package com.tanvircodder.newsme.internet;
 import android.net.Uri;
 import android.util.Log;
 
+import com.tanvircodder.newsme.MainActivity;
+
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Scanner;
-
 public class UriParseAndHttpConnection {
     private static final String LOG_TAG = UriParseAndHttpConnection.class.getSimpleName();
     // TODO: 3/4/2021 this is the api from the news api :
@@ -34,12 +37,14 @@ public class UriParseAndHttpConnection {
         }
         return newUrl;
     }
-    /*now i need to get the access the http request that will grnat sme
+/*    now i need to get the access the http request that will grnat sme
     * the access to get the json so we are going to create an mathod that
     * will hold all the logic for it*/
     public static final String URlHttpRequest(URL urlConnection) throws IOException {
         HttpURLConnection openConnection =(HttpURLConnection)
                 urlConnection.openConnection();
+        openConnection.setRequestProperty("User-Agent", "Mozilla/5.0 (X11; Linux x86_64; rv:33.0) Gecko/20100101 Firefox/33.0");
+        openConnection.setDoInput(true);
         try {
             InputStream inputStream = openConnection.getInputStream();
             Scanner scanner = new Scanner(inputStream);
@@ -58,4 +63,27 @@ public class UriParseAndHttpConnection {
         }
         return null;
     }
+    /*/*
+    To perform network operation
+     */
+    /*public static String networkCall(URL url) throws IOException {
+        // URL url = new URL("http://app.myallies.com/api/quote/goog");
+
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.setRequestProperty("User-Agent", "Mozilla/5.0 (X11; Linux x86_64; rv:33.0) Gecko/20100101 Firefox/33.0");
+        connection.setDoInput(true);
+
+        BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+        StringBuilder sb = new StringBuilder();
+
+        String line = null;
+        while ((line = reader.readLine()) != null) {
+            sb.append(line + "\n");
+        }
+
+        System.out.println(sb.toString());
+
+        return sb.toString();
+    }*/
+
 }
