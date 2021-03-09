@@ -15,7 +15,7 @@ import java.net.URL;
 import java.util.Scanner;
 public class UriParseAndHttpConnection {
     private static final String LOG_TAG = UriParseAndHttpConnection.class.getSimpleName();
-    // TODO: 3/4/2021 this is the api from the news api :
+    // : 3/4/2021 this is the api from the news api :
     //  /*http://newsapi.org/v2/top-headlines?country=in&apiKey=b41e3c219279487aba73531b5104e26a*/
     private static final String BASE_NEWS_URI = "http://newsapi.org/v2/top-headlines";
     private static final String URI_API_KEY = "apiKey";
@@ -63,27 +63,4 @@ public class UriParseAndHttpConnection {
         }
         return null;
     }
-    /*/*
-    To perform network operation
-     */
-    /*public static String networkCall(URL url) throws IOException {
-        // URL url = new URL("http://app.myallies.com/api/quote/goog");
-
-        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-        connection.setRequestProperty("User-Agent", "Mozilla/5.0 (X11; Linux x86_64; rv:33.0) Gecko/20100101 Firefox/33.0");
-        connection.setDoInput(true);
-
-        BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-        StringBuilder sb = new StringBuilder();
-
-        String line = null;
-        while ((line = reader.readLine()) != null) {
-            sb.append(line + "\n");
-        }
-
-        System.out.println(sb.toString());
-
-        return sb.toString();
-    }*/
-
 }

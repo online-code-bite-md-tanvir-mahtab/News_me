@@ -1,18 +1,34 @@
 package com.tanvircodder.newsme;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.speech.tts.TextToSpeech;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.annotation.GlideModule;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
+import com.tanvircodder.newsme.internet.GlideApp;
+import com.tanvircodder.newsme.internet.MyGlide;
+
+import java.util.List;
 
 public class AdapterList extends RecyclerView.Adapter<AdapterList.ViewHolder> {
 //    now i am going to store the value to the array data..//
-    private String[] data;
+    private List<String> data;
     private Context mContext;
     public AdapterList(Context context){
         this.mContext = context;
@@ -26,16 +42,39 @@ public class AdapterList extends RecyclerView.Adapter<AdapterList.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.mTitleTextView.setText(data[position]);
-        holder.mContentTextView.setText(data[position]);
+        ProgressBar progressBar = new ProgressBar(mContext);
+        holder.mTitleTextView.setText(data.get(position));
+//        holder.mContentTextView.setText(data[position]);
+        holder.mPublisherTextView.setText(data.get(position));
+        holder.mPublisDate.setText(data.get(position));
+        Glide.with(mContext)
+                .load(data.get(position))
+                .addListener(new RequestListener<Drawable>() {
+                    @Override
+                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                        progressBar.setVisibility(View.VISIBLE);
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                        progressBar.setVisibility(View.VISIBLE);
+                        return false;
+                    }
+                })
+                .placeholder(R.drawable.ic_launcher_background)
+                .centerCrop()
+                .into(holder.mContentImageView);
+
+
     }
 
     @Override
     public int getItemCount() {
         if (data == null)return 0;
-        return data.length;
+        return data.size();
     }
-    public void swapData(String[] data){
+    public void swapData(List<String> data){
         this.data = data;
         if (data != null){
             notifyDataSetChanged();
@@ -46,11 +85,15 @@ public class AdapterList extends RecyclerView.Adapter<AdapterList.ViewHolder> {
 //    of the view..//
     public class ViewHolder extends RecyclerView.ViewHolder {
         private TextView mTitleTextView;
-        private TextView mContentTextView;
+        private ImageView mContentImageView;
+        private TextView mPublisherTextView;
+        private TextView mPublisDate;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            mTitleTextView = (TextView) itemView.findViewById(R.id.title);
-            mContentTextView = (TextView) itemView.findViewById(R.id.content);
+            mContentImageView = (ImageView) itemView.findViewById(R.id.content_image);
+            mTitleTextView = (TextView) itemView.findViewById(R.id.content_title);
+            mPublisherTextView = (TextView) itemView.findViewById(R.id.publisher);
+            mPublisDate = (TextView) itemView.findViewById(R.id.publis_date);
         }
     }
 }

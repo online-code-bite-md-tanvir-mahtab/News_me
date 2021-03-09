@@ -17,8 +17,9 @@ import com.tanvircodder.newsme.internet.UriParseAndHttpConnection;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<String[]> {
+public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<List> {
 //    nwo i need to create the loader..//
     private static final int LOADER_VERSION_ID = 0;
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
@@ -40,9 +41,52 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     @NonNull
     @Override
-    public Loader<String[]> onCreateLoader(int id, @Nullable Bundle args) {
+    public Loader<List> onCreateLoader(int id, @Nullable Bundle args) {
+        return new AsyncTaskLoader<List>(this) {
+            private List<String> mData;
+            @Override
+            protected void onStartLoading() {
+                if (mData != null){
+                    deliverResult(mData);
+                }else {
+                    forceLoad();
+                }
+            }
+
+            @Nullable
+            @Override
+            public List loadInBackground() {
+
+                try {
+                    URL url = UriParseAndHttpConnection.buildUri();
+                    Log.e(LOG_TAG,"The uri : " + url);
+                    String httpRequest = UriParseAndHttpConnection.URlHttpRequest(url);
+                    List<String> jsonPersing = JsonParsing.keyOfJsonParsing(MainActivity.this,httpRequest);
+                    Log.e(LOG_TAG,"The json : " + httpRequest);
+                    return jsonPersing;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    return null;
+                }
+            }
+        };
+    }
+
+    @Override
+    public void onLoadFinished(@NonNull Loader<List> loader, List data) {
+        mAdapter.swapData(data);
+    }
+
+    @Override
+    public void onLoaderReset(@NonNull Loader<List> loader) {
+        mAdapter.swapData(null);
+    }
+
+   /* @NonNull
+    @Override
+    public Loader<List> onCreateLoader(int id, @Nullable Bundle args) {
         return new AsyncTaskLoader<String[]>(this) {
-            private String[] data;
+            private List<String> data;
 
             @Override
             protected void onStartLoading() {
@@ -61,7 +105,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                    Log.e(LOG_TAG,"The uri : " + url);
                    String uriRequest = UriParseAndHttpConnection
                            .URlHttpRequest(url);
-                   String[] jsonParse  = JsonParsing
+                   List<String> jsonParse  = JsonParsing
                            .keyOfJsonParsing(MainActivity.this,uriRequest);
                    Log.e(LOG_TAG,"The json : " + uriRequest);
                    return jsonParse;
@@ -80,6 +124,16 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     }
 
     @Override
+    public void onLoadFinished(@NonNull Loader<List> loader, List data) {
+
+    }
+
+    @Override
+    public void onLoaderReset(@NonNull Loader<List> loader) {
+
+    }
+
+    @Override
     public void onLoadFinished(@NonNull Loader<String[]> loader, String[] data) {
         mAdapter.swapData(data);
     }
@@ -87,5 +141,5 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     @Override
     public void onLoaderReset(@NonNull Loader<String[]> loader) {
         mAdapter.swapData(null);
-    }
+    }*/
 }
