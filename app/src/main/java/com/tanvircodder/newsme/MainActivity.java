@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     @Override
     public Loader<List> onCreateLoader(int id, @Nullable Bundle args) {
         return new AsyncTaskLoader<List>(this) {
-            private List<String> mData;
+            private List<Util> mData;
             @Override
             protected void onStartLoading() {
                 if (mData != null){
@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                     URL url = UriParseAndHttpConnection.buildUri();
                     Log.e(LOG_TAG,"The uri : " + url);
                     String httpRequest = UriParseAndHttpConnection.URlHttpRequest(url);
-                    List<String> jsonPersing = JsonParsing.keyOfJsonParsing(MainActivity.this,httpRequest);
+                    List<Util> jsonPersing = JsonParsing.keyOfJsonParsing(MainActivity.this,httpRequest);
                     Log.e(LOG_TAG,"The json : " + httpRequest);
                     return jsonPersing;
                 } catch (Exception e) {
@@ -82,64 +82,5 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         mAdapter.swapData(null);
     }
 
-   /* @NonNull
-    @Override
-    public Loader<List> onCreateLoader(int id, @Nullable Bundle args) {
-        return new AsyncTaskLoader<String[]>(this) {
-            private List<String> data;
 
-            @Override
-            protected void onStartLoading() {
-                if (data != null) {
-                    deleverResult(data);
-                } else {
-                    forceLoad();
-                }
-            }
-
-            @Nullable
-            @Override
-            public String[] loadInBackground() {
-               try {
-                   URL url = UriParseAndHttpConnection.buildUri();
-                   Log.e(LOG_TAG,"The uri : " + url);
-                   String uriRequest = UriParseAndHttpConnection
-                           .URlHttpRequest(url);
-                   List<String> jsonParse  = JsonParsing
-                           .keyOfJsonParsing(MainActivity.this,uriRequest);
-                   Log.e(LOG_TAG,"The json : " + uriRequest);
-                   return jsonParse;
-               } catch (Exception e) {
-                   e.printStackTrace();
-                   return null;
-               }
-            }
-
-
-            private void deleverResult(String[] data) {
-                this.data = data;
-                super.deliverResult(data);
-            }
-        };
-    }
-
-    @Override
-    public void onLoadFinished(@NonNull Loader<List> loader, List data) {
-
-    }
-
-    @Override
-    public void onLoaderReset(@NonNull Loader<List> loader) {
-
-    }
-
-    @Override
-    public void onLoadFinished(@NonNull Loader<String[]> loader, String[] data) {
-        mAdapter.swapData(data);
-    }
-
-    @Override
-    public void onLoaderReset(@NonNull Loader<String[]> loader) {
-        mAdapter.swapData(null);
-    }*/
 }
